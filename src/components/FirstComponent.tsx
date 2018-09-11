@@ -5,8 +5,11 @@ export default class FirstComponent extends React.Component<{}> {
         public render() {
                 return (
                         <div className="centreText">
-                                {/* React components must have a wrapper node/element */}
-                                <h1>Placeholder #1</h1>
+                                <form> Enter your city:<br/> 
+                                        <input type="text" name="city" placeholder="City..."/><br/>
+                                        <input type="text" name="country" placeholder="Country..."/><br/>
+                                        <button id="submit">Submit</button>
+                                </form>
                         </div>
                 );
         }
