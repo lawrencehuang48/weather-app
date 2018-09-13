@@ -1,6 +1,7 @@
 import * as React from "react";
 
-export default class FirstComponent extends React.Component<{}> {
+
+export default class FormComponent extends React.Component {
 
         public render() {
                 return (
@@ -8,7 +9,7 @@ export default class FirstComponent extends React.Component<{}> {
                                 <form> Enter your city:<br/> 
                                         <input type="text" name="city" placeholder="City..."/><br/>
                                         <input type="text" name="country" placeholder="Country..."/><br/>
-                                        <button id="submit">Submit</button>
+                                        <button id="submit">Get Weather</button>
                                 </form>
                         </div>
                 );
