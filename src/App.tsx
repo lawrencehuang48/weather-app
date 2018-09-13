@@ -47,7 +47,7 @@ export default class App extends React.Component<{}, any> {
         pressure: data.main.pressure + " hPA",
         temperature: data.main.temp,
         windAng: data.wind.deg,
-        windSpeed: data.wind.speed,         
+        windSpeed: (data.wind.speed * 3.6).toFixed(2),         
       });
     }).catch((error) => {
       this.setState({
@@ -97,11 +97,12 @@ export default class App extends React.Component<{}, any> {
               </Typography>
           </Toolbar>
         </AppBar>
+        <p style={{paddingTop: '40px'}}>Please note: All time zones are NZST based, the api returned a UNIX timestamp which i only used to calculate the current time in NZ</p>
         <div className="container my-5">
-          <div className="row card" style={{backgroundColor: '#ffcc99'}}>
+          <div className="row card" style={{backgroundColor: '#4d4d4d'}}>
             <div className="col-md-6 push-md-3 col-xl-4 push-xl-4 card-body">
               <div className="d-flex justify-content-between">
-                <div className="d-inline-block">
+                <div className="d-inline-block" style={{color: '#ff9933'}}>
                   <h3>{this.state.city}, {this.state.country}</h3>
                   <p>{this.state.date}</p>
                   <p>{this.state.conditions}</p>
@@ -113,12 +114,12 @@ export default class App extends React.Component<{}, any> {
                   src= {this.state.icon}/>
                 </div>
                 <div className="col-4 col-md-4">
-                  <h2 className="big-font">{this.state.temperature}<span className="units">&deg; C</span></h2>
+                  <h2 className="big-font" style={{color: '#ff9933'}}>{this.state.temperature}<span className="units" >&deg; C</span></h2>
                 </div>
                 <div className="col-4 col-md-5">
-                  <div className="small-font">
+                  <div className="small-font" style={{color: '#ff9933'}}>
                     <p>Humidity: {this.state.humidity}%</p>
-                    <p>Wind: {this.state.windSpeed} mph {this.state.windAng}°</p>
+                    <p>Wind: {this.state.windSpeed} kph {this.state.windAng}°</p>
                     <p>Pressure: {this.state.pressure}</p>
                   </div>
                 </div>
@@ -127,7 +128,7 @@ export default class App extends React.Component<{}, any> {
                 <input value={this.state.inputValue}
                 onChange={this.handleChange}
                 className="form-control mb-4 mb-sm-0" type="text" placeholder="City, Country"/>
-                <button type="submit" className="btn btn-primary" style={{backgroundColor: '#4d4d4d'}}>Submit</button>
+                <button type="submit" className="btn btn-primary" style={{color: 'White', font: 'Helvetica'}}>Submit</button>
               </form>
               <p className="text-danger text-center mt-2">{this.state.errorMsg}</p>
             </div>
