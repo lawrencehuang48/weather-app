@@ -1,6 +1,9 @@
+import {AppBar, IconButton, Toolbar, Typography} from '@material-ui/core/';
+import MenuIcon from '@material-ui/icons/Menu';
 import * as React from 'react';
 import  api from './api.json';
 import './App.css';
+
 
 export default class App extends React.Component<{}, any> {
 
@@ -21,9 +24,10 @@ export default class App extends React.Component<{}, any> {
     const year = a.getFullYear();
     const month = months[a.getMonth()];
     const date = a.getDate();
-    const hour = a.getHours();
-    const min = a.getMinutes();
-    const time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min;
+    const hr = a.getHours();
+    const m = "0" + a.getMinutes();
+    const s = "0" + a.getSeconds();
+    const time = date + ' ' + month + ' ' + year + ' ' + hr + ':' + m.substr(-2) + ':' + s.substr(-2);
     return time;
   }
 
@@ -37,13 +41,18 @@ export default class App extends React.Component<{}, any> {
         conditions: data.weather[0].main,
         country: data.sys.country,
         date: this.timeConverter(data.dt),
+        errorMsg:'', 
         humidity: data.main.humidity,
         icon: "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
         pressure: data.main.pressure + " hPA",
         temperature: data.main.temp,
         windAng: data.wind.deg,
-        windSpeed: data.wind.speed,           
-      })
+        windSpeed: data.wind.speed,         
+      });
+    }).catch((error) => {
+      this.setState({
+        errorMsg: 'Please, enter a valid city or country name.'
+      });
     });
   }
 
@@ -78,8 +87,18 @@ export default class App extends React.Component<{}, any> {
 
     return (
       <div className="App">
+        <AppBar position="static" style={{backgroundColor: '#4d4d4d'}}>
+          <Toolbar>
+              <IconButton  aria-label="Menu" color="inherit" style={{color: '#ff9933'}}>
+                  <MenuIcon aria-haspopup="true"/>
+              </IconButton>
+              <Typography variant="display2" color="inherit">
+                  <h1 style={{fontSize: '75%', paddingLeft: '40px', color: '#ff9933'}}>WeatherApp</h1>
+              </Typography>
+          </Toolbar>
+        </AppBar>
         <div className="container my-5">
-          <div className="row card">
+          <div className="row card" style={{backgroundColor: '#ffcc99'}}>
             <div className="col-md-6 push-md-3 col-xl-4 push-xl-4 card-body">
               <div className="d-flex justify-content-between">
                 <div className="d-inline-block">
@@ -107,12 +126,14 @@ export default class App extends React.Component<{}, any> {
               <form onSubmit={this.handleSubmit} className="form-inline mt-4 justify-content-around">
                 <input value={this.state.inputValue}
                 onChange={this.handleChange}
-                className="form-control mb-4 mb-sm-0" type="text" placeholder="City, State or Zip Code"/>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                className="form-control mb-4 mb-sm-0" type="text" placeholder="City, Country"/>
+                <button type="submit" className="btn btn-primary" style={{backgroundColor: '#4d4d4d'}}>Submit</button>
               </form>
+              <p className="text-danger text-center mt-2">{this.state.errorMsg}</p>
             </div>
           </div>
         </div>
+        <p>Powered by OpenWeatherMap API ©</p>
       </div>
     );
   }
