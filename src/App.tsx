@@ -1,7 +1,8 @@
 import {AppBar, IconButton, Toolbar, Typography} from '@material-ui/core/';
 import MenuIcon from '@material-ui/icons/Menu';
+import moment from 'moment';
 import * as React from 'react';
-import  api from './api.json';
+import api from './api.json';
 import './App.css';
 
 
@@ -13,25 +14,13 @@ export default class App extends React.Component<{}, any> {
       inputValue: '',
       url: `http://api.openweathermap.org/data/2.5/weather?q=auckland&appid=${api.key}&units=metric`
     }
-    this.getData = this.getData.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.getWeather = this.getWeather.bind(this);
+    this.changeHandler = this.changeHandler.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
   }
 
-  public timeConverter(UNIXtimestamp: any){
-    const a = new Date(UNIXtimestamp * 1000);
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const year = a.getFullYear();
-    const month = months[a.getMonth()];
-    const date = a.getDate();
-    const hr = a.getHours();
-    const m = "0" + a.getMinutes();
-    const s = "0" + a.getSeconds();
-    const time = date + ' ' + month + ' ' + year + ' ' + hr + ':' + m.substr(-2) + ':' + s.substr(-2);
-    return time;
-  }
 
-  public getData(){
+  public getWeather(){
     const url = this.state.url;
     fetch(url).then((res) => {
       return res.json();
@@ -40,14 +29,14 @@ export default class App extends React.Component<{}, any> {
         city : data.name,
         conditions: data.weather[0].main,
         country: data.sys.country,
-        date: this.timeConverter(data.dt),
+        date: moment.unix(data.dt).format('dddd, MMMM Do, YYYY h:mm:ss A'),
         errorMsg:'', 
         humidity: data.main.humidity,
         icon: "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
         pressure: data.main.pressure + " hPA",
         temperature: data.main.temp,
         windAng: data.wind.deg,
-        windSpeed: (data.wind.speed * 3.6).toFixed(2),         
+        windSpeed: (data.wind.speed * 3.6).toFixed(1),         
       });
     }).catch((error) => {
       this.setState({
@@ -58,28 +47,28 @@ export default class App extends React.Component<{}, any> {
 
 
   public componentDidMount(){
-    this.getData();
+    this.getWeather();
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
         url: `http://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${api.key}&units=metric`
       }, () => {
-        this.getData();
+        this.getWeather();
       });
     });
   }
 
-  public handleChange(e: any) {
+  public changeHandler(e: any) {
     this.setState({
       inputValue: e.target.value
     });
   }
 
-  public handleSubmit(e: any) {
+  public submitHandler(e: any) {
     e.preventDefault();
     this.setState({
       url: `http://api.openweathermap.org/data/2.5/weather?q=${this.state.inputValue}&appid=${api.key}&units=metric`,
     }, () => {
-      this.getData();
+      this.getWeather();
     });
   }
   
@@ -97,7 +86,8 @@ export default class App extends React.Component<{}, any> {
               </Typography>
           </Toolbar>
         </AppBar>
-        <p style={{paddingTop: '40px'}}>Please note: All time zones are NZST based, the api returned a UNIX timestamp which i only used to calculate the current time in NZ</p>
+        <p style={{paddingTop: '40px'}}>Please note: The time zone is NZST based and does not represent the current time, instead it represents the time that the data was last updated, the time is calculated by converting a UNIX value from the JSON file that was provided by the API</p>
+        <p>Also, some cities share the same name across different countries so make sure to be specific, e.g. Perth, AU and Perth, GB</p>
         <div className="container my-5">
           <div className="row card" style={{backgroundColor: '#4d4d4d'}}>
             <div className="col-md-6 push-md-3 col-xl-4 push-xl-4 card-body">
@@ -124,9 +114,9 @@ export default class App extends React.Component<{}, any> {
                   </div>
                 </div>
               </div>
-              <form onSubmit={this.handleSubmit} className="form-inline mt-4 justify-content-around">
+              <form onSubmit={this.submitHandler} className="form-inline mt-4 justify-content-around">
                 <input value={this.state.inputValue}
-                onChange={this.handleChange}
+                onChange={this.changeHandler}
                 className="form-control mb-4 mb-sm-0" type="text" placeholder="City, Country"/>
                 <button type="submit" className="btn btn-primary" style={{color: 'White', font: 'Helvetica'}}>Submit</button>
               </form>
