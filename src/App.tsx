@@ -12,7 +12,7 @@ export default class App extends React.Component<{}, any> {
     super(props);
     this.state = {
       inputValue: '',
-      url: `http://api.openweathermap.org/data/2.5/weather?q=auckland&appid=${api.key}&units=metric`
+      url: `https://api.openweathermap.org/data/2.5/weather?q=auckland&appid=${api.key}&units=metric`
     }
     this.getWeather = this.getWeather.bind(this);
     this.changeHandler = this.changeHandler.bind(this);
@@ -32,7 +32,7 @@ export default class App extends React.Component<{}, any> {
         date: moment.unix(data.dt).format('dddd, MMMM Do, YYYY h:mm:ss A'),
         errorMsg:'', 
         humidity: data.main.humidity,
-        icon: "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
+        icon: "https://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
         pressure: data.main.pressure + " hPA",
         temperature: data.main.temp,
         windAng: data.wind.deg,
@@ -50,7 +50,7 @@ export default class App extends React.Component<{}, any> {
     this.getWeather();
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
-        url: `http://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${api.key}&units=metric`
+        url: `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${api.key}&units=metric`
       }, () => {
         this.getWeather();
       });
@@ -66,7 +66,7 @@ export default class App extends React.Component<{}, any> {
   public submitHandler(e: any) {
     e.preventDefault();
     this.setState({
-      url: `http://api.openweathermap.org/data/2.5/weather?q=${this.state.inputValue}&appid=${api.key}&units=metric`,
+      url: `https://api.openweathermap.org/data/2.5/weather?q=${this.state.inputValue}&appid=${api.key}&units=metric`,
     }, () => {
       this.getWeather();
     });
