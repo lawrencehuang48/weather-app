@@ -1,4 +1,4 @@
-# Weather-App 
+# WeatherApp 
 A project created using React + Typescript
 Azure url: https://lhweatherapp.azurewebsites.net/
 
