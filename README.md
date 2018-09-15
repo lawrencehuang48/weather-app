@@ -1,5 +1,6 @@
 # WeatherApp 
 A project created using React + Typescript
+
 Azure url: https://lhweatherapp.azurewebsites.net/
 
 This application utilises the following:
