@@ -1,1 +1,1 @@
-Weather-App project created using React + typescript
+Weather-App project created using React + Typescript
